@@ -76,6 +76,9 @@ When an application allows users to create, upload, or send different kinds of d
 3. **Live Character & Byte Counting:** Calculate real UTF-8 bytes in real time (e.g., `124 bytes` or `18.4 MB / 100 MB`).
 4. **Lifecycle / Retention Controls:** Allow user to set expiration upfront so the system cleans up temporary items automatically.
 5. **Keyboard Submission:** `Ctrl + Enter` (or `Cmd + Enter`) to submit from any active text input.
+6. **High-Contrast Active States (WCAG 1.4.11):**
+   - *Active Tab Contrast*: In dark mode, an active tab must NEVER blend into its container (`#111827` active on `#0F172A` container is only 1.02:1). Always elevate the active tab with `--card-elevated: #1E293B`, an explicit 1px semantic border (`1px solid var(--accent)`), an active glow outline (`box-shadow: 0 0 0 1px var(--accent-glow)`), and an active tinted icon.
+   - *Form Control Boundaries*: Retention inputs, dropdown chevrons, and secondary buttons in dark mode must use borders with $\ge 18\%$ white opacity (`rgba(255, 255, 255, 0.18)` or `#334155`) to meet the 3:1 non-text contrast requirement against dark backgrounds.
 
 ---
 
@@ -126,6 +129,16 @@ Power users expect keyboard fluency:
 | `Escape` | Clear Search / Close Active Modal | Dismisses topmost modal or blurs search field |
 | `Ctrl + Enter` | Submit Active Form / Send Item | Form `onKeyDown` handler |
 | `Tab` / `Shift + Tab` | Logical DOM Focus Order | Enforce accessible `:focus-visible` rings ($2\text{px}$ blue outline) |
+
+### 5.1 WCAG 2.2 AA / AAA Color Contrast Auditing
+Never ship web applications with unverified or low-contrast design tokens:
+- **Normal Text Contrast ($\ge 4.5:1$ AA, $\ge 7:1$ AAA)**:
+  - *Light Mode Trap*: Slate-400 (`#94A3B8`) on `#FFFFFF` is only 2.57:1 (fails AA). Darken light-mode secondary text to at least Slate-500 (`#64748B`), yielding 4.77:1.
+  - *Warning / Amber Badge Trap*: Amber-600 (`#D97706`) on `#FFFFFF` is only 3.22:1 (fails AA). Darken to Amber-700 (`#B45309`) for text badges, yielding 4.82:1.
+  - *Dark Mode Text*: Ensure `text-primary` (`#F8FAFC`, 15.6:1 AAA) and `text-secondary` (`#CBD5E1`, 11:1 AAA) provide effortless readability on deep slate cards.
+- **Component & Border Contrast ($\ge 3:1$, WCAG 1.4.11)**:
+  - Form inputs, search fields, and segmented control borders in dark mode must meet $\ge 3:1$ contrast against adjacent containers.
+  - Focus indicators must use high-contrast primary rings (`box-shadow: 0 0 0 2px var(--focus-ring)`).
 
 ---
 

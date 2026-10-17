@@ -244,7 +244,41 @@ Build screens that scale smoothly across window size classes using `WindowSizeCl
 
 ---
 
-## 7. Reference Open-Source Repositories
+## 7. Material 3 Color Contrast & State Accessibility (WCAG 2.2 AA / AAA)
+
+Mobile devices are uniquely prone to contrast failure due to variable ambient lighting (direct sunlight, outdoor glare, OLED battery-saver dimming). Strive for WCAG 2.2 AAA text contrast ($\ge 7:1$) and strict compliance with WCAG 1.4.11 (non-text boundary contrast $\ge 3:1$) and WCAG 1.4.1 (use of color).
+
+### 7.1 The Material 3 Dark-Mode FilterChip Trap
+- **The Defect**: By default, Material 3's `FilterChip` in dark mode uses `secondaryContainer` (`#37474F`) for its selected background against the dark `surface` (`#14181E`). This yields an unacceptable contrast ratio of **1.83:1**. In low brightness or glare, users cannot tell which chip is active.
+- **The Fix**:
+  1. Enforce high-contrast boundary definition with `selectedBorderColor = MaterialTheme.colorScheme.primary` (which produces a **9.88:1** contrast ratio in dark mode).
+  2. Set `selectedBorderWidth = 1.5.dp`.
+  3. Comply with WCAG 1.4.1 (states not dependent on color alone) by providing a leading checkmark icon:
+     ```kotlin
+     FilterChip(
+         selected = isSelected,
+         onClick = { onSelect() },
+         label = { Text(label) },
+         leadingIcon = if (isSelected) {
+             { Icon(Icons.Filled.Done, contentDescription = null, Modifier.size(16.dp)) }
+         } else null,
+         border = FilterChipDefaults.filterChipBorder(
+             enabled = true,
+             selected = isSelected,
+             selectedBorderColor = MaterialTheme.colorScheme.primary,
+             selectedBorderWidth = 1.5.dp
+         )
+     )
+     ```
+
+### 7.2 Sunlight & Glare Legibility Standards
+1. **Primary Text vs Surface**: Standardize dark mode on high-contrast text (`onSurface` `#E1E2E8` or `#F8FAFC` on `#14181E`), achieving **$\ge 13:1$** contrast (exceeding WCAG AAA).
+2. **Form Control Outlines**: `OutlinedTextField` and radio/checkbox borders must use `outline` tokens that maintain at least **$3:1$** contrast against container cards (`Color(0xFF8D9199)` or explicit `rgba(255, 255, 255, 0.20)`).
+3. **Compact Preset Rows**: When laying out compact chip rows (e.g. retention presets `1h`, `4h`, `12h`, `1d`), preserve target sizes and apply `maxLines = 1` with `selectedBorderColor` so chips never wrap or look ambiguous.
+
+---
+
+## 8. Reference Open-Source Repositories
 
 Inspect these industry-leading open-source Android projects for design and implementation inspiration:
 

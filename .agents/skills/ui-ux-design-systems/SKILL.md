@@ -135,7 +135,56 @@ flowchart LR
 
 ---
 
-## 5. UI/UX Revamp Playbook (Phase-Wise Execution)
+## 5. WCAG 2.2 AA / AAA Color Contrast Engineering & Verification
+
+Contrast is not aesthetic preference; it is a mathematical engineering specification. Low contrast causes severe cognitive fatigue, legibility failure under glare or low brightness, and accessibility compliance violations.
+
+### 5.1 Mathematical Contrast Ratio Specification
+The relative luminance $L$ of any sRGB color is computed using the CIE formula:
+$$L = 0.2126 R_s + 0.7152 G_s + 0.0722 B_s$$
+where each color channel $C \in \{R, G, B\}$ is linearized from 8-bit sRGB ($C_{\text{srgb}} = C_{8\text{bit}} / 255$):
+$$C_s = \begin{cases} \frac{C_{\text{srgb}}}{12.92} & \text{if } C_{\text{srgb}} \le 0.04045 \\ \left(\frac{C_{\text{srgb}} + 0.055}{1.055}\right)^{2.4} & \text{if } C_{\text{srgb}} > 0.04045 \end{cases}$$
+
+The contrast ratio between a lighter color ($L_1$) and a darker color ($L_2$) is:
+$$\text{Contrast Ratio} = \frac{L_1 + 0.05}{L_2 + 0.05} : 1$$
+
+### 5.2 Strict Compliance Thresholds
+
+| Element Category | WCAG 2.2 AA Minimum | WCAG 2.2 AAA Target | Verification Standard |
+| :--- | :--- | :--- | :--- |
+| **Normal Body Text** (< 18pt / 24px regular, < 14pt / 18.5px bold) | **$\ge 4.5:1$** | **$\ge 7.0:1$** | Primary data, labels, descriptions, table rows, button labels |
+| **Large Text & Headings** ($\ge 18\text{pt}$ / $24\text{px}$, or $\ge 14\text{pt}$ bold) | **$\ge 3.0:1$** | **$\ge 4.5:1$** | Display titles, section headers, prominent metric numbers |
+| **UI Components & Graphical Objects (WCAG 1.4.11)** | **$\ge 3.0:1$** | **$\ge 4.5:1$** | Input borders, toggles, segmented tab boundaries, active chip outlines, focus rings |
+| **Use of Color (WCAG 1.4.1)** | Non-color indicator required | Dual-encoding required | Never convey selection or status by color alone; pair with checkmarks, icons, or text weight |
+
+### 5.3 The 5 Common Contrast Traps & Systematic Fixes
+
+#### 1. The Dark-Mode Segmented Tab Blend
+- **The Defect**: An active tab set to `--card: #111827` inside a container set to `--tab-bg: #0F172A`. The contrast ratio is **1.02:1** (a 2-unit RGB delta). The selected tab completely blends into the container background, making it impossible for the user to determine the active selection.
+- **The Fix**: Elevate the active tab background to `--card-elevated: #1E293B`, add an active 1px semantic border (`1px solid var(--accent)` / `#10B981`), a subtle glow ring (`box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.25)`), and tint the active tab's SVG icon to match.
+
+#### 2. The Light-Mode Muted Text Contrast Failure
+- **The Defect**: Default secondary/muted text using Slate-400 (`#94A3B8`) on white (`#FFFFFF`) or light paper (`#F8FAFC`). Contrast ratio is **2.57:1**, severely failing WCAG SC 1.4.3 ($\ge 4.5:1$).
+- **The Fix**: Darken light-mode secondary text to at least Slate-500 (`#64748B`), which yields **4.77:1** on `#FFFFFF` and **4.54:1** on `#F8FAFC`.
+
+#### 3. The Amber / Warning Text Badge Failure
+- **The Defect**: Using bright amber (`#D97706` / Amber-600) on pure white for status pills. Contrast ratio is **3.22:1**, failing the 4.5:1 text threshold.
+- **The Fix**: Darken to Amber-700 (`#B45309`) for text badges in light mode, achieving **4.82:1** while maintaining semantic warmth.
+
+#### 4. Invisible Dark-Mode Input & Control Boundaries (WCAG 1.4.11)
+- **The Defect**: Subtle 8%–12% white opacity borders (`rgba(255, 255, 255, 0.08)`) on dark slate surfaces (`#111827` / `#0B0F17`) have a contrast ratio of only **1.2:1–1.4:1**, violating the 3:1 non-text boundary requirement.
+- **The Fix**: Set default dark-mode input borders to at least **18% white opacity** (`rgba(255, 255, 255, 0.18)` / `#334155`) and hover states to **32%** (`rgba(255, 255, 255, 0.32)` / `#475569`).
+
+#### 5. The Android Material 3 Dark-Mode FilterChip Trap
+- **The Defect**: In Material 3, default selected `FilterChip` uses `secondaryContainer` (`#37474F`) against the dark surface (`#14181E`), yielding only **1.83:1** contrast. Without an outline or glyph, the chip fails both SC 1.4.11 and SC 1.4.1.
+- **The Fix**: Explicitly specify:
+  1. `selectedBorderColor = MaterialTheme.colorScheme.primary` (which yields **9.88:1** contrast).
+  2. `selectedBorderWidth = 1.5.dp`.
+  3. `leadingIcon = if (selected) { { Icon(Icons.Filled.Done, ...) } } else null` so selection is visible independent of color perception.
+
+---
+
+## 6. UI/UX Revamp Playbook (Phase-Wise Execution)
 
 When tasked with redoing or modernizing an existing application's UI/UX, follow this 4-step execution strategy:
 
