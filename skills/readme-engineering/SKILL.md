@@ -4,13 +4,13 @@ description: >-
   Comprehensive guide and operational framework for engineering world-class, human-grade
   GitHub READMEs and technical repository documentation. Use whenever creating, auditing,
   or refactoring a README for open-source tools, self-hosted services, developer utilities,
-  or client-server applications. Enforces anti-AI slop standards, the 30-second rule,
+  or client-server applications. Enforces clear documentation guidelines, the 30-second rule,
   dual-audience narrative balance, copy-pasteable quickstarts, and high-signal visual showcases.
 ---
 
 # README Engineering & Technical Documentation Guide
 
-A rigorous framework for creating world-class, human-grade GitHub repository READMEs that respect the reader's time, communicate technical value clearly, and eliminate "AI slop".
+A rigorous framework for creating world-class, human-grade GitHub repository READMEs that respect the reader's time, communicate technical value clearly, and eliminate generic marketing filler.
 
 ---
 
@@ -26,13 +26,13 @@ Your README must answer three questions in under 30 seconds:
 
 ---
 
-## 2. The Anti-AI Slop Framework
+## 2. Guidelines for Clear, Grounded Writing
 
-Generative AI tools default to bloated corporate PR speak. High-quality open-source projects reject this tone entirely.
+Documentation often defaults to bloated corporate PR speak. High-quality open-source projects avoid this tone entirely.
 
 ### 2.1 The Banned Words & Clichés Dictionary
 
-| ❌ Banned "AI Slop" Phrase | ✔️ Human, Grounded Alternative |
+| ❌ Banned Buzzword / Cliché | ✔️ Clear, Grounded Alternative |
 | :--- | :--- |
 | *"In today's fast-paced digital landscape..."* | *(Delete entirely. Get straight to the problem).* |
 | *"Effortlessly transfer / seamlessly integrate..."* | *"Drop files from your browser and they appear on your phone."* |

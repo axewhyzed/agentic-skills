@@ -18,7 +18,7 @@ A rigorous, institutional-grade operational guide for user interface engineering
 ## 1. Core Operating Principles
 
 1. **Information Density with Breathing Room**: High-density layouts (Linear, Bloomberg, Stripe, TradingView) present maximum signal per viewport pixel without clutter. This is achieved through deliberate contrast, compact typographic scales, 1px subtle borders, and consistent spacing grids (4px / 8px).
-2. **Rejection of "AI Slop"**: Reject generic AI aesthetics:
+2. **High-Craft Design Guidelines**: Reject unrefined, generic defaults:
    - ❌ *No oversaturated purple/indigo gradients.*
    - ❌ *No unreadable low-contrast gray-on-gray text (`text-gray-400` on white or `text-zinc-600` on black).*
    - ❌ *No emoji icons instead of crisp vector SVGs (Lucide / Radix).*
